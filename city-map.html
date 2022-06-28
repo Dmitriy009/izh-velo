@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IzhVelo</title>
+    <link href="style.css" rel="stylesheet">
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=45412988-fc26-4edf-9edb-82af42c80c64&lang=ru_RU" type="text/javascript">
+    </script>
+    
+    <script type="text/javascript">
+        let coords = [
+            ['56.858013830828924 53.1744131902692', '56.85273439762256 53.198619980367', '56.84482558630683 53.19673432181645'], 
+            ['56.87535628989202 53.281864452228824', '56.86629517378816 53.30367725383621', '56.83311184324697 53.27964535105553'],
+            ['56.85853000209465 53.161198490184', '56.86584948246811 53.161027805550056', '56.86092306672637 53.17665012889281'],
+            ['56.891814966239785 53.263004827584396', '56.90981353943426 53.362912680909396', '56.88693885992983 53.4336278488313'],
+            ['56.87190068137762 53.22286863220875', '56.84552933584055 53.22682268641481']
+        ]
+        let center = [56.84958897701172, 53.2828339374348];
+        ymaps.ready(init);
+
+        function init(){
+            let Route1, Route2, Route3, Route4, Route5;
+
+            let map = new ymaps.Map('map', {
+                center: center,
+                zoom: 12,
+                controls: []
+            });
+
+            let routes_array = create_route(Route1, Route2, Route3, Route4, Route5);
+
+            for(let i = 0; i < coords.length; i++){
+                add_route(map, routes_array[i]);
+            }
+        }
+
+        function create_route() {
+            let a = [];
+            a = arguments;
+            for(let i = 0; i < coords.length; i++){
+                a[i] = new ymaps.multiRouter.MultiRoute({
+                    referencePoints: [
+                        coords[i][0],
+                        coords[i][1],
+                        coords[i][2]
+                    ],
+                    params: {
+                        routingMode: 'bicycle'
+                    }
+                }, {
+                    boundsAutoApply: false
+                });
+            }
+            return a;
+        }
+        
+        function add_route(map, route) {
+                map.geoObjects.add(route);
+        }
+    </script>
+    
+</head>
+<body style="background-image: none; background-color: #ffffff">
+    <header class="header">
+        <div class="logo">
+            <a href="index.html">
+                <img src="assets/icon.svg" width="70px" height="70px">
+            </a>
+        </div>
+
+        <div class="button-head">
+            <a class="button-h" href="index.html">Главная</a>
+        </div>
+        </div>
+    </header>
+
+    <div id="map" style="width: 100vw; height: 90vh"></div>
+</body>
+</html>
